@@ -1,0 +1,11 @@
+This is a simple imlementation of Conway's Game of Live for the purpose of learning Racket scheme.
+
+I am not trying to break any records and the focus is on using Racket concepts.
+
+File structure:
+ - cell.rkt Defines the primary data types used as the basis for the other files.
+ - simulation.rkt Calculates the next state of the cells based on conway's rules.
+ - load.rtk Loads a starting point for a simulation.
+ - ascii.rkt Draws the cell structure as ascii art.
+ - image.rkt Draws the cell structure as a picture.
+ - board.txt An example starting board
