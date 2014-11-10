@@ -4,6 +4,9 @@
 (require racket/set)
 (require racket/stream)
 
+(provide (contract-out
+          [new-live (-> (set/c cell?) (set/c cell?))]))
+
 (define (cell-sum . ps)
   (let* ([map-sum (λ (f l) (apply + (map f l)))]
          [rs (map-sum cell-row ps)]
