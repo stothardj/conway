@@ -4,24 +4,25 @@
 (require racket/set)
 (require racket/stream)
 
-(define (posn-sum . ps)
+(define (cell-sum . ps)
   (let* ([map-sum (λ (f l) (apply + (map f l)))]
-         [rs (map-sum posn-row ps)]
-         [cs (map-sum posn-col ps)])
-    (posn rs cs)))
+         [rs (map-sum cell-row ps)]
+         [cs (map-sum cell-col ps)])
+    (cell rs cs)))
 
-(define (list->posn l)
-  (apply posn l))
+(define (list->cell l)
+  (apply cell l))
 
 (define neighbor-positions
-  (map list->posn '((0 1) (1 0) (0 -1) (-1 0) (1 1) (-1 1) (1 -1) (-1 -1))))
+  (map list->cell '((0 1) (1 0) (0 -1) (-1 0) (1 1) (-1 1) (1 -1) (-1 -1))))
 
 (define (neighbors pos)
- (map (λ (p) (posn-sum pos p)) neighbor-positions))
+ (map (λ (p) (cell-sum pos p)) neighbor-positions))
 
 (define (live? live-before num-neighbors)
-  (or (and live-before (<= 2 num-neighbors) (<= num-neighbors 3))
-      (and (not live-before) (= num-neighbors 3))))
+  (if live-before
+      (and (<= 2 num-neighbors) (<= num-neighbors 3))
+      (= num-neighbors 3)))
 
 (define (tally k m)
   (hash-set m k (add1 (hash-ref m k 0))))

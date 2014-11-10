@@ -1,4 +1,5 @@
 #lang racket
 
-(provide (struct-out posn))
-(struct posn (row col) #:transparent)
+(provide (struct-out cell))
+(struct cell (row col) #:transparent)
+

@@ -12,7 +12,7 @@
          [place (λ (x) (+ (* square-size x) half-square-size))]
          [f (λ (accum e)
               (place-image live-img
-                           (place (posn-col e))
-                           (place (posn-row e))
+                           (place (cell-col e))
+                           (place (cell-row e))
                            accum))])
     (stream-fold f scene living)))

@@ -5,7 +5,7 @@
 (define (ascii-row living r cols)
   (let ([p (open-output-string)])
     (for ([i (in-range (sub1 cols))])
-        (display (if (set-member? living (posn r i)) #\# #\.) p))
+        (display (if (set-member? living (cell r i)) #\# #\.) p))
     (get-output-string p)))
 
 (define (ascii-draw living rows cols)

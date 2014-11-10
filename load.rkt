@@ -17,7 +17,7 @@
              [i 0])
     (if (empty? mat) accum
         (loop (rest mat)
-              (append accum (map (curry posn i) (first mat)))
+              (append accum (map (curry cell i) (first mat)))
               (add1 i)))))
 
 (define (load-board port)
