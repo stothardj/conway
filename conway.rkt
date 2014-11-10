@@ -5,14 +5,22 @@
 (require 2htdp/image)
 
 ;; Calculating next position
-(define (pos-add a b)
-  (map + a b))
+(struct posn (row col) #:transparent)
+
+(define (posn-sum . ps)
+  (let* ([map-sum (λ (f l) (apply + (map f l)))]
+         [rs (map-sum posn-row ps)]
+         [cs (map-sum posn-col ps)])
+    (posn rs cs)))
+
+(define (list->posn l)
+  (apply posn l))
 
 (define neighbor-positions
-  '((0 1) (1 0) (0 -1) (-1 0) (1 1) (-1 1) (1 -1) (-1 -1)))
+  (map list->posn '((0 1) (1 0) (0 -1) (-1 0) (1 1) (-1 1) (1 -1) (-1 -1))))
 
 (define (neighbors pos)
- (map (λ (p) (pos-add pos p)) neighbor-positions))
+ (map (λ (p) (posn-sum pos p)) neighbor-positions))
 
 (define (live? live-before num-neighbors)
   (or (and live-before (<= 2 num-neighbors) (<= num-neighbors 3))
@@ -53,7 +61,7 @@
              [i 0])
     (if (empty? mat) accum
         (loop (rest mat)
-              (append accum (map (curry list i) (first mat)))
+              (append accum (map (curry posn i) (first mat)))
               (add1 i)))))
 
 (define (load-board port)
@@ -68,7 +76,7 @@
 (define (ascii-row living r cols)
   (let ([p (open-output-string)])
     (for ([i (in-range (sub1 cols))])
-        (display (if (set-member? living (list r i)) #\# #\.) p))
+        (display (if (set-member? living (posn r i)) #\# #\.) p))
     (get-output-string p)))
 
 (define (ascii-draw living rows cols)
@@ -86,12 +94,12 @@
          [place (λ (x) (+ (* square-size x) half-square-size))]
          [f (λ (accum e)
               (place-image live-img
-                           (place (second e))
-                           (place (first e))
+                           (place (posn-col e))
+                           (place (posn-row e))
                            accum))])
     (stream-fold f scene living)))
 
 ;; Repl testing
-(define s (apply set '((1 2) (1 1) (2 2) (1 4) (1 5))))
+(define s (apply set (map list->posn '((1 2) (1 1) (2 2) (1 4) (1 5)))))
 
 (define board (call-with-input-file "board.txt" load-board))
