@@ -5,7 +5,7 @@
 (require racket/stream)
 
 (provide (contract-out
-          [new-live (-> (set/c cell?) (set/c cell?))]))
+          [next-board (-> board? board?)]))
 
 (define (cell-sum . ps)
   (let* ([map-sum (λ (f l) (apply + (map f l)))]
@@ -20,7 +20,7 @@
   (map list->cell '((0 1) (1 0) (0 -1) (-1 0) (1 1) (-1 1) (1 -1) (-1 -1))))
 
 (define (neighbors pos)
- (map (λ (p) (cell-sum pos p)) neighbor-positions))
+ (map (curry cell-sum pos) neighbor-positions))
 
 (define (live? live-before num-neighbors)
   (if live-before
@@ -45,3 +45,17 @@
                  (set-add accum pos)
                  accum))])
     (sequence-fold f (set) (in-hash neighbor-map))))
+
+(define (bound-simulation live rows cols)
+  (let ([f (λ (c) 
+             (let ([row (cell-row c)]
+                   [col (cell-col c)])
+               (and (<= 0 row) (<= 0 col) (< row rows) (< col cols))))]
+        [sequence->set (compose1 list->set sequence->list)])
+    (sequence->set (sequence-filter f (in-set live)))))
+
+(define (next-board b)
+  (let* ([old-live (board-cells b)]
+         [now-live (new-live old-live)]
+         [bounded-live (bound-simulation now-live (board-rows b) (board-cols b))])
+    (struct-copy board b [cells bounded-live])))

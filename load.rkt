@@ -24,8 +24,11 @@
   (let* ([lines (sequence->list (in-lines port))]
          [line-lists (map string->list lines)]
          [living-char? (curry char=? #\#)]
-         [living-by-row (map (curry all-match-pos living-char?) line-lists)])
-    (list->set (label-rows living-by-row))))
+         [living-by-row (map (curry all-match-pos living-char?) line-lists)]
+         [living-set (list->set (label-rows living-by-row))]
+         [rows (length lines)]
+         [cols (length (first line-lists))])
+    (board living-set rows cols)))
 
 (define (load-board-from-file fname)
   (call-with-input-file fname load-board))

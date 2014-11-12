@@ -16,3 +16,6 @@
                            (place (cell-row e))
                            accum))])
     (stream-fold f scene living)))
+
+(define (image-board b)
+  (image-draw (board-cells b) (board-rows b) (board-cols b)))
