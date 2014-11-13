@@ -9,3 +9,4 @@ File structure:
  - ascii.rkt Draws the cell structure as ascii art.
  - image.rkt Draws the cell structure as a picture.
  - board.txt An example starting board
+ - animation.txt File which contains the functions to run the animation.

@@ -2,6 +2,9 @@
 
 (require "cell.rkt")
 
+(provide (contract-out
+          [load-board-from-file (-> string? board?)]))
+
 (define (all-match-pos p ls)
   (let loop ([ls ls]
              [accum null]

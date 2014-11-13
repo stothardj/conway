@@ -5,6 +5,9 @@
 
 (define square-size 10)
 
+(provide (contract-out
+          [image-board (-> board? image?)]))
+
 (define (image-draw living rows cols)
   (let* ([scene (empty-scene (* square-size cols) (* square-size rows))]
          [live-img (square square-size "solid" "black")]
